@@ -47,8 +47,7 @@ fun ItemScreen(
             }) {
                 Icon(Icons.Default.Add, contentDescription = "Add TODO")
             }
-        },
-        modifier = Modifier.padding(16.dp)
+        }
     ) { padding ->
         if(state.isAddingItem){
             AddItemDialog(
@@ -59,7 +58,7 @@ fun ItemScreen(
 
         LazyColumn(
             contentPadding = padding,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ){
             item {

@@ -53,5 +53,6 @@ fun MyApplicationTheme(
         colorScheme = colorScheme,
         typography = Typography,
         content = content
+
     )
 }

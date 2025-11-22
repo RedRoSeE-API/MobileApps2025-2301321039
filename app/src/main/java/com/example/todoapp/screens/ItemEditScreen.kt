@@ -34,127 +34,129 @@ fun ItemEditScreen(
         return
     }
 
-    var title by remember { mutableStateOf(item.title) }
-    var description by remember { mutableStateOf(item.description) }
-    var dueDate by remember { mutableStateOf(item.dueDate) }
+    Surface{
+        var title by remember { mutableStateOf(item.title) }
+        var description by remember { mutableStateOf(item.description) }
+        var dueDate by remember { mutableStateOf(item.dueDate) }
 
-    val context = LocalContext.current
-    val calendar = Calendar.getInstance()
-    dueDate?.let { calendar.time = it }
+        val context = LocalContext.current
+        val calendar = Calendar.getInstance()
+        dueDate?.let { calendar.time = it }
 
-    val timePickerDialog = remember {
-        TimePickerDialog(
-            context,
-            { _, hour, minute ->
-                calendar.set(Calendar.HOUR_OF_DAY, hour)
-                calendar.set(Calendar.MINUTE, minute)
-                dueDate = calendar.time
-            },
-            calendar.get(Calendar.HOUR_OF_DAY),
-            calendar.get(Calendar.MINUTE),
-            true
-        )
-    }
+        val timePickerDialog = remember {
+            TimePickerDialog(
+                context,
+                { _, hour, minute ->
+                    calendar.set(Calendar.HOUR_OF_DAY, hour)
+                    calendar.set(Calendar.MINUTE, minute)
+                    dueDate = calendar.time
+                },
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                true
+            )
+        }
 
-    val datePickerDialog = remember {
-        DatePickerDialog(
-            context,
-            { _, year, month, day ->
-                calendar.set(year, month, day)
-                dueDate = calendar.time
-                timePickerDialog.show()
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-    }
+        val datePickerDialog = remember {
+            DatePickerDialog(
+                context,
+                { _, year, month, day ->
+                    calendar.set(year, month, day)
+                    dueDate = calendar.time
+                    timePickerDialog.show()
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            )
+        }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding()
-            .padding(16.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .padding(16.dp)
         ) {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Go back"
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Go back"
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Edit Item",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
                 )
             }
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = "Edit Item",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = title,
+                onValueChange = { title = it },
+                label = { Text("Title") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
             )
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
-        OutlinedTextField(
-            value = title,
-            onValueChange = { title = it },
-            label = { Text("Title") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        OutlinedTextField(
-            value = description,
-            onValueChange = { description = it },
-            label = { Text("Description") },
-            modifier = Modifier.fillMaxWidth(),
-            minLines = 3,
-            maxLines = 5
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        OutlinedButton(
-            onClick = { datePickerDialog.show() },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = dueDate?.let {
-                    SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault()).format(it)
-                } ?: "Select due date"
+            OutlinedTextField(
+                value = description,
+                onValueChange = { description = it },
+                label = { Text("Description") },
+                modifier = Modifier.fillMaxWidth(),
+                minLines = 3,
+                maxLines = 5
             )
-        }
 
-        Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
-        Text(
-            text = "Created: ${item.createdOn?.let {
-                SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(it)
-            } ?: "Unknown"}",
-            fontSize = 12.sp,
-            color = MaterialTheme.colorScheme.outline
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Button(
-            onClick = {
-                onSave(
-                    item.copy(
-                        title = title,
-                        description = description,
-                        dueDate = dueDate
-                    )
+            OutlinedButton(
+                onClick = { datePickerDialog.show() },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = dueDate?.let {
+                        SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault()).format(it)
+                    } ?: "Select due date"
                 )
-                navController.popBackStack()
-            },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = title.isNotBlank()
-        ) {
-            Text("Save Changes")
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = "Created: ${item.createdOn?.let {
+                    SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(it)
+                } ?: "Unknown"}",
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.outline
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Button(
+                onClick = {
+                    onSave(
+                        item.copy(
+                            title = title,
+                            description = description,
+                            dueDate = dueDate
+                        )
+                    )
+                    navController.popBackStack()
+                },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = title.isNotBlank()
+            ) {
+                Text("Save Changes")
+            }
         }
     }
 }
