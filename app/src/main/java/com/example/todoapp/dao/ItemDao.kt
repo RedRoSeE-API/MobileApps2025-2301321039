@@ -24,12 +24,15 @@ interface ItemDao {
     @Query("DELETE FROM item WHERE id = :itemId")
     suspend fun deleteById(itemId: Int)
 
+    @Query("SELECT * FROM item WHERE id = :id")
+    fun getItemById(id: Int): Flow<Item>
+
     @Query("SELECT * FROM item ORDER BY title ASC")
     fun getItemsByTitle(): Flow<List<Item>>
 
     @Query("SELECT * FROM item ORDER BY createdOn ASC")
     fun getItemsByCreatedOn(): Flow<List<Item>>
 
-    @Query("SELECT * FROM item ORDER BY createdOn ASC")
+    @Query("SELECT * FROM item ORDER BY dueDate ASC")
     fun getItemsByDueDate(): Flow<List<Item>>
 }

@@ -2,6 +2,7 @@ package com.example.todoapp.event
 
 import com.example.todoapp.entity.Item
 import com.example.todoapp.shared.SortTypes
+import java.util.Date
 
 
 sealed interface ItemEvent {
@@ -12,7 +13,7 @@ sealed interface ItemEvent {
 
     data class SetTitle(val title: String): ItemEvent
     data class SetDescription(val description: String): ItemEvent
-    data class SetDueDate(val dueDate: String): ItemEvent
+    data class SetDueDate(val dueDate: Date): ItemEvent
 
 
     object ShowDialog: ItemEvent

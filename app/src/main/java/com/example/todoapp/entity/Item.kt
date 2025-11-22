@@ -2,6 +2,7 @@ package com.example.todoapp.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.Date
 
 @Entity
 data class Item (
@@ -11,6 +12,6 @@ data class Item (
 
     val title: String,
     val description: String,
-    val createdOn: String,
-    val dueDate: String
+    val dueDate: Date? = null,
+    val createdOn: Date? = null
 )

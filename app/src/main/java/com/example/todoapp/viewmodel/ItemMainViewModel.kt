@@ -1,4 +1,4 @@
-package com.example.todoapp.view
+package com.example.todoapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,16 +15,18 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.Calendar
+import java.util.Date
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class ItemViewModel(
+class ItemMainViewModel(
     private val itemDao: ItemDao
 ): ViewModel() {
 
     private val _sortType = MutableStateFlow(SortTypes.TITLE)
 
     private val _items = _sortType
-        .flatMapLatest { sortType ->  // Remove the extra { here
+        .flatMapLatest { sortType ->
             when(sortType) {
                 SortTypes.TITLE -> itemDao.getItemsByTitle()
                 SortTypes.CREATED_ON -> itemDao.getItemsByCreatedOn()
@@ -58,13 +60,12 @@ class ItemViewModel(
                 val title = state.value.title
                 val description = state.value.description
                 val dueDate = state.value.dueDate
-                val createdOn = "created now"
 
                 val item = Item(
                     title = title,
                     description = description,
                     dueDate = dueDate,
-                    createdOn = createdOn
+                    createdOn = getCurrentDate()
                 )
 
                 viewModelScope.launch {
@@ -116,9 +117,18 @@ class ItemViewModel(
                 isAddingItem = false,
                 title = "",
                 description = "",
-                dueDate = "",
-                createdOn = ""
+                dueDate = null,
+                createdOn = null
             )
         }
+    }
+
+    fun getCurrentDate(): Date {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        return calendar.time
     }
 }

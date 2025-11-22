@@ -1,4 +1,4 @@
-package com.example.todoapp
+package com.example.todoapp.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -24,12 +24,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.todoapp.AddItemDialog
 import com.example.todoapp.event.ItemEvent
+import com.example.todoapp.nav.Screen
+import com.example.todoapp.shared.ItemState
 import com.example.todoapp.shared.SortTypes
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun ItemScreen(
-    state: com.example.todoapp.shared.ItemState,
+    navController: NavController,
+    state: ItemState,
     onEvent: (ItemEvent) -> Unit
 ) {
     Scaffold(
@@ -82,18 +89,26 @@ fun ItemScreen(
                     modifier = Modifier.fillMaxSize()
                 ){
                     Column(
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f).clickable{navController.navigate(Screen.ItemViewScreen.route + "/${item.id}")}
                     ) {
                         Text(
                             text = item.title,
                             fontSize = 20.sp
                         )
                         Text(
-                            text = "${item.description.take(10)}...",
+                            text = if (item.description.length > 10) "${item.description.take(10)}..." else item.description,
                             fontSize = 12.sp
                         )
                         Text(
-                            text = item.dueDate,
+                            text = item.dueDate?.let {
+                                SimpleDateFormat("MMM dd, yyyy HH:mm:ss", Locale.getDefault()).format(it)
+                            } ?: "",
+                            fontSize = 12.sp
+                        )
+                        Text(
+                            text = item.createdOn?.let {
+                                SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(it)
+                            } ?: "",
                             fontSize = 12.sp
                         )
                     }

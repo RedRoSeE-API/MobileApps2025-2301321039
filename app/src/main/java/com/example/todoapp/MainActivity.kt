@@ -13,8 +13,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
+import com.example.todoapp.nav.Navigation
 import com.example.todoapp.ui.theme.MyApplicationTheme
-import com.example.todoapp.view.ItemViewModel
+import com.example.todoapp.viewmodel.ItemMainViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -23,14 +24,15 @@ class MainActivity : ComponentActivity() {
             applicationContext,
             ItemDatabase::class.java,
             "items.db"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
-    private val viewModel by viewModels<ItemViewModel>(
+    private val viewModel by viewModels<ItemMainViewModel>(
         factoryProducer = {
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return ItemViewModel(db.dao) as T
+                    return ItemMainViewModel(db.dao) as T
                 }
             }
         }
@@ -49,7 +51,13 @@ class MainActivity : ComponentActivity() {
 //                }
 //            }
             val state = viewModel.state.collectAsState()
-            ItemScreen(state = state.value, onEvent = viewModel::onEvent)
+//            ItemScreen(state = state.value, onEvent = viewModel::onEvent)
+
+            Navigation(
+                state = state.value,
+                onEvent = viewModel::onEvent,
+                dao = db.dao
+            )
         }
     }
 }
