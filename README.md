@@ -4,14 +4,17 @@ A modern Android TODO application built with Jetpack Compose, Room Database, and
 
 ## 📋 Table of Contents
 
-- [Idea](#idea)
-- [How It Works](#how-it-works)
-- [Architecture](#architecture)
-- [User Flow](#user-flow)
-- [Getting Started](#getting-started)
-- [Testing](#testing)
-- [Screenshots](#screenshots)
-- [APK Download](#apk-download)
+## 📋 Table of Contents
+
+- [Idea](#-idea)
+- [How It Works](#-how-it-works)
+- [Architecture](#-architecture)
+- [User Flow](#-user-flow)
+- [Getting Started](#-getting-started)
+- [Testing](#-testing)
+- [Screenshots](#-screenshots)
+- [APK Download](#-apk-download)
+
 
 ## 💡 Idea
 
