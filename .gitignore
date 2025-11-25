@@ -37,4 +37,4 @@ google-services.json
 *.hprof
 
 #Mac Specific
-*.dm
+.DS_Store
